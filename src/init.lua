@@ -55,7 +55,6 @@ function MethodTween.new(instance: Instance, tweenInfo: TweenInfo, propertyTable
 		_updateConnection = nil,
 		_delayedThread = nil,
 	}, MethodTween)
-	table.freeze(self)
 
 	return self
 end
