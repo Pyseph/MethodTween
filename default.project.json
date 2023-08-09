@@ -1,0 +1,9 @@
+{
+	"name": "MethodTween",
+	"tree": {
+		"$path": "src/",
+		"Packages": {
+			"$path": "Packages/"
+		}
+	}
+}
