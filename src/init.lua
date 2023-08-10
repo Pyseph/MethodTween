@@ -38,6 +38,9 @@ end
 local MethodTween = {}
 MethodTween.__index = MethodTween
 
+local activeTweens = setmetatable({}, {
+	__mode = "v",
+})
 function MethodTween.new(instance: Instance, tweenInfo: TweenInfo, propertyTable: {[string]: {any}})
 	for _, propData in propertyTable do
 		local initialValue, finalValue = propData[1], propData[2]
@@ -60,14 +63,27 @@ function MethodTween.new(instance: Instance, tweenInfo: TweenInfo, propertyTable
 end
 
 function MethodTween:Play()
+	if activeTweens[self.Instance] then
+		activeTweens[self.Instance]:Cancel()
+	end
 	self:_stop()
 
 	if self.PlaybackState ~= Enum.PlaybackState.Paused then
 		self._time = 0
 	end
+	--[[
+		I could set this to only Delayed since it's set to Playing in the delayed thread, but then the following could occur:
+		```lua
+		local tween = MethodTween.new(...)
+		tween:Play()
+		print(tween.PlaybackState) -- Delayed
+		```
+	]]
+	activeTweens[self.Instance] = self
 	self.PlaybackState = self.TweenInfo.DelayTime > 0 and Enum.PlaybackState.Delayed or Enum.PlaybackState.Playing
 
 	self._delayedThread = task.delay(self.TweenInfo.DelayTime, function()
+		self.PlaybackState = Enum.PlaybackState.Playing
 		local initialValues = {}
 		for name, propData in self._propertyTable do
 			initialValues[name] = propData[1]
@@ -109,6 +125,7 @@ function MethodTween:Play()
 	end)
 end
 function MethodTween:_stop()
+	activeTweens[self.Instance] = nil
 	if self._updateConnection then
 		self._updateConnection:Disconnect()
 		self._updateConnection = nil
