@@ -133,8 +133,9 @@ function MethodTween:_stop()
 
 	if self._delayedThread and coroutine.status(self._delayedThread) == "suspended" then
 		task.cancel(self._delayedThread)
-		self._delayedThread = nil
 	end
+
+	self._delayedThread = nil
 end
 
 function MethodTween:Cancel()
