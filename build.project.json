@@ -1,0 +1,12 @@
+{
+	"name": "MethodTween",
+	"tree": {
+		"$path": "build/main.lua",
+		"src": {
+			"$path": "src/"
+		},
+		"Packages": {
+			"$path": "Packages/"
+		}
+	}
+}

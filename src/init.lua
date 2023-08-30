@@ -2,7 +2,8 @@
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
-local Signal = require(script.Packages.Signal)
+local Package = script.Parent
+local Signal = require(Package.Signal)
 
 local builtInLerps = {
 	CFrame = true,
