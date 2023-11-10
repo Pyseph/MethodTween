@@ -2,11 +2,11 @@
 	"name": "MethodTween",
 	"tree": {
 		"$path": "build/main.lua",
-		"src": {
-			"$path": "src/"
-		},
 		"Packages": {
-			"$path": "Packages/"
+			"$path": "Packages"
+		},
+		"MethodTween": {
+			"$path": "src"
 		}
 	}
 }

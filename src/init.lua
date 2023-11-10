@@ -2,8 +2,9 @@
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
-local Package = script.Parent
-local Signal = require(Package.Signal)
+-- The former is when the module is used as a standalone, the latter is when it's installed with Wally
+local Packages = script.Parent.Packages
+local Signal = require(Packages.Signal)
 
 local builtInLerps = {
 	CFrame = true,
@@ -58,9 +59,19 @@ function MethodTween.new(instance: Instance, tweenInfo: TweenInfo, propertyTable
 		_time = 0,
 		_updateConnection = nil,
 		_delayedThread = nil,
+		_observers = {},
 	}, MethodTween)
 
 	return self
+end
+
+function MethodTween:Observe(callback)
+	local callbackId = newproxy(true)
+	self._observers[callbackId] = callback
+	return callbackId
+end
+function MethodTween:StopObserving(callbackId)
+	self._observers[callbackId] = nil
 end
 
 function MethodTween:Play()
@@ -106,6 +117,9 @@ function MethodTween:Play()
 				tweenAlpha = 1 - tweenAlpha
 			end
 
+			for _, observer in pairs(self._observers) do
+				task.spawn(observer, tweenAlpha)
+			end
 			for name, propData in self._propertyTable do
 				local initialValue = initialValues[name]
 

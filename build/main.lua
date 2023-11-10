@@ -1,1 +1,1 @@
-return require(script.src)
+return require(script.MethodTween)
