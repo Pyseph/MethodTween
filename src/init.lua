@@ -3,7 +3,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
 -- The former is when the module is used as a standalone, the latter is when it's installed with Wally
-local Packages = script.Parent.Packages
+local Packages = script.Parent:FindFirstChild("Packages") or script.Parent
 local Signal = require(Packages.Signal)
 
 local builtInLerps = {
