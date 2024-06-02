@@ -74,6 +74,15 @@ function MethodTween:StopObserving(callbackId)
 	self._observers[callbackId] = nil
 end
 
+local function DelayTween(DelayTime, Callback)
+	if DelayTime == 0 then
+		Callback()
+	else
+		task.delay(DelayTime, Callback)
+	end
+end
+
+
 function MethodTween:Play()
 	if activeTweens[self.Instance] then
 		activeTweens[self.Instance]:Cancel()
@@ -94,7 +103,7 @@ function MethodTween:Play()
 	activeTweens[self.Instance] = self
 	self.PlaybackState = self.TweenInfo.DelayTime > 0 and Enum.PlaybackState.Delayed or Enum.PlaybackState.Playing
 
-	self._delayedThread = task.delay(self.TweenInfo.DelayTime, function()
+	self._delayedThread = DelayTween(self.TweenInfo.DelayTime, function()
 		self.PlaybackState = Enum.PlaybackState.Playing
 		local initialValues = {}
 		for name, propData in self._propertyTable do
